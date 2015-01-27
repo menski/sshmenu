@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+term_cmd=${TERM_CMD:-urxvt -e}
+ssh_cmd=${SSH_CMD:-ssh}
+ssh_config=${SSH_CONFIG_FILE:-$HOME/.ssh/config}
+
+ssh_hosts=( $(grep "^Host\s\+[^*]" $ssh_config | cut -d " " -f 2) )
+ssh_host=$(printf '%s\n' "${ssh_hosts[@]}" | dmenu -i "$@")
+
+if [ -n "$ssh_host" ]; then
+  $term_cmd $ssh_cmd $ssh_host
+fi
